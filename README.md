@@ -1,6 +1,6 @@
 Imperative and System Programming [AS2013]
 ------------------------------------------
-This repo hosts the homeworks and other resources of the lecture [Imperative and System Programming](http://diuf.unifr.ch/pai/ip/) at University of Fribourg.
+This repo hosts homeworks and other resources of the lecture [Imperative and System Programming](http://diuf.unifr.ch/pai/ip/) at University of Fribourg.
 
 ##Resources
 
