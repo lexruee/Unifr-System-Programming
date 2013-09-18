@@ -6,7 +6,7 @@ Example 1:
 % ./wcount
 ```
 This command executes the wcount program. It uses the function getchar() from the stdio.h library to read the next character from the standard input (stdin). 
-Because we have not specified a input redirection (<) the programm reads directly the input from the terminal. 
+Because we haven't specified a input redirection (<) the program reads directly the input from the terminal. 
 Entering a phrase like hello world and terminating the program with Ctrl-D results in:
 ```
 1 2 12
