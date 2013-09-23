@@ -18,8 +18,12 @@ char* reverse(char* str){
 main(){
 	char hello[] = "Hello";
 
+	char a_line[] = "Hello" " " "World!";
+
 	printf("str len: %d\n", str_len(hello));
 	printf("str reverse: %s\n", reverse(hello));
+
+	printf("line: %s\n",a_line);
 	
 }
 
