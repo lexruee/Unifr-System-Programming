@@ -22,7 +22,29 @@
 \section*{Series 2}
 \subsection*{Part 1: C}
 \subsubsection*{1. Type Conversion, Casting and ASCII Table}
+Remark: In the ASCII table the integer value 65 corresponds to the character 'A'.
+\begin{lstlisting}
+(1) printf("%c %i\n", c, c);
+\end{lstlisting}
 
+In the C language char datatypes are implicit casted to the datatype int. Therefore an explicit cast is not necessary in the previous example.
+The statement (1) will print:\\
+A 65
+
+\begin{lstlisting}
+(2) printf("%c %i\n", i, i);
+\end{lstlisting}
+In the statement (2) the first format specifier \%c converts the int value i to a char 'A'. The second format specifier just replaces the value in the string.
+So the output will be:\\
+A 65
+
+\begin{lstlisting}
+printf("%f %i\n", pi, (int)pi);
+\end{lstlisting}
+The first format specifier takes a variable of type float and the second one a variable of type int.
+Because the third argument in printf() is casted to an int, the statement above will print:\\
+
+3.14 3
 
 \subsubsection*{2. Constant, Variable, Escape Character '\textbackslash', and Octal resp. Hexadecimal Digits}
 
