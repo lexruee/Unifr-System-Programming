@@ -1,0 +1,68 @@
+\documentclass[12pt]{article}
+\usepackage{url,graphicx,tabularx,array,geometry}
+\usepackage{listings}
+\usepackage[utf8]{inputenc}
+\usepackage{setspace}
+\setlength{\parskip}{1ex} %--skip lines between paragraphs
+\setlength{\parindent}{0pt} %--don't indent paragraphs
+
+%-- Commands for header
+\renewcommand{\title}[1]{\textbf{#1}\\}
+\renewcommand{\line}{\begin{tabularx}{\textwidth}{X>{\raggedleft}X}\hline\\\end{tabularx}\\[-0.5cm]}
+\newcommand{\leftright}[2]{\begin{tabularx}{\textwidth}{X>{\raggedleft}X}#1%
+& #2\\\end{tabularx}\\[-0.5cm]}
+
+\onehalfspacing
+%\linespread{2} %-- Uncomment for Double Space
+\begin{document}
+
+\title{Imperative and System Programming Autumn 2013}
+\line
+\leftright{\today}{Alexander Rüedlinger, 08-129-710} %-- left and right positions in the header
+\section*{Series 2}
+\subsection*{Part 1: C}
+\subsubsection*{1. Type Conversion, Casting and ASCII Table}
+Remark: In the ASCII table the integer value 65 corresponds to the character 'A'.
+\begin{lstlisting}
+(1) printf("%c %i\n", c, c);
+\end{lstlisting}
+
+In the C language char datatypes are implicit casted to the datatype int. Therefore an explicit cast is not necessary in the previous example.
+The statement (1) will print:\\
+A 65
+
+\begin{lstlisting}
+(2) printf("%c %i\n", i, i);
+\end{lstlisting}
+In the statement (2) the first format specifier \%c converts the int value i to a char 'A'. The second format specifier just replaces the value in the string.
+So the output will be:\\
+A 65
+
+\begin{lstlisting}
+printf("%f %i\n", pi, (int)pi);
+\end{lstlisting}
+The first format specifier takes a variable of type float and the second one a variable of type int.
+Because the third argument in printf() is casted to an int, the statement above will print:\\
+
+3.14 3
+
+\subsubsection*{2. Constant, Variable, Escape Character '\textbackslash', and Octal resp. Hexadecimal Digits}
+
+\subsubsection*{3. enum Type}
+
+\subsubsection*{4. Logical Expressions}
+
+\subsubsection*{5. Conditional Expression}
+
+\subsubsection*{6. Bitwise operator}
+
+\subsubsection*{7. Order of Evaluation}
+\paragraph{a)}
+In the C programming language it isn't specified in which order the operands of an operator are evaluated. The only exceptions are the following operators: and, or, tenary and the comma operator
+
+\paragraph{b)} 
+
+\subsection*{Part 2: System and Unix}
+\subsubsection*{8. Memory Diagrams}
+
+\end{document}
