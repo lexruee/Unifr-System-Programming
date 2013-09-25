@@ -3,6 +3,7 @@
 \usepackage{listings}
 \usepackage[utf8]{inputenc}
 \usepackage{setspace}
+\usepackage{amsmath}
 \setlength{\parskip}{1ex} %--skip lines between paragraphs
 \setlength{\parindent}{0pt} %--don't indent paragraphs
 
@@ -47,6 +48,49 @@ Because the third argument in printf() is casted to an int, the statement above 
 3.14 3
 
 \subsubsection*{2. Constant, Variable, Escape Character '\textbackslash', and Octal resp. Hexadecimal Digits}
+\begin{lstlisting}
+(0) #define AT '\100'
+\end{lstlisting}
+The line above creates a symbolic constant with the content '\textbackslash 100'.
+Every occurrence of the symbolic constant AT will be substituted with '\textbackslash 100' by the pre-processor.
+
+\begin{lstlisting}
+(1) char at = '\x40'; // variable in hexadecimal
+\end{lstlisting}
+This line creates a char variable using an hexadecimal constant. The hexadecimal value is equals to 64 in the decimal number system.
+\begin{equation}
+\text{at} = [4 \: 0]_{16} = [0100 \: 0000] = 64
+\end{equation} 
+Because character values are internal stored as integers, the value 64 corresponds to the @ symbol according the ASCII table.
+
+\begin{lstlisting}
+(2) printf("%c %i %o %x\n", '@', '@', '@', '@');
+\end{lstlisting}
+The printf statement uses four different format specifiers for the character @.
+The \%c specifier will be substituted with the character @, \%i will be replaced by the integer value 64. The other specifiers \%o and \%x will convert to the integer value 64 to octal and hex. 
+\begin{equation}
+\begin{split}
+{[64]}_{10} = {[2^6]}_{10} = {[0100 \: 0000]}_2 \\
+= [4 \: 0]_{8} =[4 \: 0]_{16}
+\end{split}
+\end{equation}
+
+So the output of this printf statement will be:
+
+\begin{lstlisting}
+@ 64 
+\end{lstlisting}
+
+
+\begin{lstlisting}
+(3) printf("%c %i %o %x\n", AT, AT, AT, AT);
+\end{lstlisting}
+
+
+\begin{lstlisting}
+(4) printf("%c %i %o %x\n", at, at, at, at);
+\end{lstlisting}
+
 
 \subsubsection*{3. enum Type}
 
