@@ -10,7 +10,7 @@
 \renewcommand{\title}[1]{\textbf{#1}\\}
 \renewcommand{\line}{\begin{tabularx}{\textwidth}{X>{\raggedleft}X}\hline\\\end{tabularx}\\[-0.5cm]}
 \newcommand{\leftright}[2]{\begin{tabularx}{\textwidth}{X>{\raggedleft}X}#1%
-& #2\\\end{tabularx}\\[-0.5cm]}
+& #2\\\end{tabularx}\\[-1.5cm]}
 
 \onehalfspacing
 %\linespread{2} %-- Uncomment for Double Space
@@ -21,13 +21,24 @@
 \leftright{\today}{Alexander Rüedlinger, 08-129-710} %-- left and right positions in the header
 \section*{Series 1}
 \subsection*{Exercise 3: Word count}
+\paragraph{Some Remarks}
+On unix/linux system there are three important standard streams:
+\begin{itemize}
+\item stdout: standard output
+\item stdin: standard input
+\item stderr: standard error
+\end{itemize}
+
+These streams are used to read data into a program or to print data on the terminal (shell). The standard library (stdlib.h) of C uses these streams to implement input and ouptut functions such as getchar(), scanf(), putchar() and printf().
+
+
 \subsubsection*{Example 1}
 \begin{lstlisting}
 % ./wcount
 \end{lstlisting}
 This command executes the wcount program. It uses the function getchar() from the stdio.h library to read the next character from the standard input (stdin).  
    
-Because we haven't specified an input redirection ($<$) the program reads directly the input from the terminal. 
+Because we haven't specified an input redirection ($<$) the program reads directly the input from the terminal. So it's waiting for an user input.
 Entering a phrase like hello world and terminating the program with Ctrl-D results in:
 \begin{lstlisting}
 1 2 12
@@ -37,11 +48,11 @@ Entering a phrase like hello world and terminating the program with Ctrl-D resul
 \begin{lstlisting}
 % ./wcount < wcount.c
 \end{lstlisting}
-In this example an input redirection is used to feed the programm wcount with data.  
+In this example an input redirection is used to feed the program wcount with data.  
 It reads the entire file wcount.c and computes mectris such as:
 \begin{itemize}
 	\item number of line feeds,
-	\item bytes (number of chars) 
+	\item bytes (number of chars, because one char is equals to one byte) 
 	\item and words.
 \end{itemize}
 
@@ -49,10 +60,10 @@ It reads the entire file wcount.c and computes mectris such as:
 \begin{lstlisting}
 % ./wcount < wcount > test
 \end{lstlisting}
-Here are two input/ouput operators applied in conjunction with ./wcount.  
-The operator $<$ reads the binary file wcount, well it reads itself ;-).  
-After that it computes the mectrics (bytes, words, line feeds). 
-The produced output is redirected using the output redirection $>$ operator to the file test. 
+In the listing above the input and the output redirection are applied in conjunction with ./wcount.  
+The input redirection $<$ reads the binary file wcount, well it reads itself ;-).  
+After that wcount computes the mectrics (bytes, words, line feeds). 
+The produced output is redirected using the output redirection $>$ to the file test. 
 
 
 \subsubsection*{Example 4}
