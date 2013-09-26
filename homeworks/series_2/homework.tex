@@ -21,14 +21,26 @@
 \line
 \leftright{\today}{Alexander Rüedlinger, 08-129-710} %-- left and right positions in the header
 \section*{Series 2}
+\paragraph{Some remarks}
+\begin{itemize}
+\item In the C language the data type char has the size of one byte (one sign bit and 7 seven data bits). They can store a value of at least $2^7-1$ and the minimum value of $-2^7$.
+\item ASCII is a character-encoding scheme that encodes 128 specified characters. The ASCII code is the numerical representation of characters.
+\item In the ASCII table the integer value 65 corresponds to the character 'A'.
+\item The character '@' corresponds to the value 64.
+\item Per default an int declaration is equals to signed int.
+\item A conversion from char to int is  a so called widening cast, since an int is at least 2 bytes big. Such a conversion cam always be done implicitly, but not the other way around.
+\end{itemize}
+
 \subsection*{Part 1: C}
 \subsubsection*{1. Type Conversion, Casting and ASCII Table}
-Remark: In the ASCII table the integer value 65 corresponds to the character 'A'.
 \begin{lstlisting}
 (1) printf("%c %i\n", c, c);
 \end{lstlisting}
 
-In the C language char datatypes are implicit casted to the datatype int. Therefore an explicit cast is not necessary in the previous example.
+Because character value is internal represented by an integer value, the data type char can implicitely be casted to the datatype int (widening cast). Therefore, an explicit cast isn't necessary. The format specifier \%c and \%i are substitued with the matching argument in the printf argument list. 
+
+So the specifier \%c will be replaced by the second argument c and as well the specifier \%i by the third argument c.
+
 The statement (1) will print:\\
 A 65
 
@@ -40,10 +52,10 @@ So the output will be:\\
 A 65
 
 \begin{lstlisting}
-printf("%f %i\n", pi, (int)pi);
+(3) printf("%f %i\n", pi, (int)pi);
 \end{lstlisting}
 The first format specifier takes a variable of type float and the second one a variable of type int.
-Because the third argument in printf() is casted to an int, the statement above will print:\\
+Because the third argument in printf() is explicitly casted to an int data type, the variable pi is truncated, so it's floating point part is lost. Thus the printf statement above will print:
 
 3.14 3
 
@@ -52,59 +64,179 @@ Because the third argument in printf() is casted to an int, the statement above 
 (0) #define AT '\100'
 \end{lstlisting}
 The line above creates a symbolic constant with the content '\textbackslash 100'.
-Every occurrence of the symbolic constant AT will be substituted with '\textbackslash 100' by the pre-processor.
+Every occurrence of the symbolic constant AT will be substituted with '\textbackslash 100' by the C preprocessor.
 
 \begin{lstlisting}
 (1) char at = '\x40'; // variable in hexadecimal
 \end{lstlisting}
 This line creates a char variable using an hexadecimal constant. The hexadecimal value is equals to 64 in the decimal number system.
 \begin{equation}
-\text{at} = [4 \: 0]_{16} = [0100 \: 0000] = 64
+\text{at} = [4 \: 0]_{16} = [0100 \: 0000]_2 =  [64]_{10}
 \end{equation} 
-Because character values are internal stored as integers, the value 64 corresponds to the @ symbol according the ASCII table.
+As already mentioned character values are internal stored as integers, so the ASCII value 64 corresponds to the @ symbol.
 
 \begin{lstlisting}
 (2) printf("%c %i %o %x\n", '@', '@', '@', '@');
 \end{lstlisting}
 The printf statement uses four different format specifiers for the character @.
-The \%c specifier will be substituted with the character @, \%i will be replaced by the integer value 64. The other specifiers \%o and \%x will convert to the integer value 64 to octal and hex. 
+The \%c specifier will be substituted with the character @. The other specifiers \%i, \%o and \%x will convert to the char '@' internal representd by the value 64 to an integer, octal and hex value. 
+A computation for each number system yields:
 \begin{equation}
 \begin{split}
-{[64]}_{10} = {[2^6]}_{10} = {[0100 \: 0000]}_2 \\
-= [4 \: 0]_{8} =[4 \: 0]_{16}
+@_{char} = {[64]}_{10} = {[2^6]}_{10} = {[0100 \: 0000]}_2 \\
+= [1 \: 0 \: 0]_{8} =[4 \: 0]_{16}
 \end{split}
 \end{equation}
 
 So the output of this printf statement will be:
 
 \begin{lstlisting}
-@ 64 
+@ 64  100 40
 \end{lstlisting}
 
 
 \begin{lstlisting}
 (3) printf("%c %i %o %x\n", AT, AT, AT, AT);
 \end{lstlisting}
+Each of the symbolic constants AT is replaced by the octal constant '\textbackslash 100'. The format specifiers given in the printf statement will convert the octal value $100$ to their corresponding  "number system". So \%c will convert 100 to its associated character symbol '@', \%i to 64, \%x to hex and \%o will only replace the specifier.
+The output will be:
+\begin{lstlisting}
+@ 64  100 40
+\end{lstlisting}
 
 
 \begin{lstlisting}
 (4) printf("%c %i %o %x\n", at, at, at, at);
 \end{lstlisting}
+Similar in the previous example the hex constant '\textbackslash x40' will be formated according the specified format specifiers. 
+
+This yields the output:
+\begin{lstlisting}
+@ 64  100 40
+\end{lstlisting}
 
 
 \subsubsection*{3. enum Type}
+\begin{lstlisting}
+(0) enum {FALSE, TRUE} b; // declaration of variable b,
+                          // without tag
+\end{lstlisting}
+This line declares the enum values FALSE and TRUE but without an enum identifier (tag). In ANSI C, an enum constant is alwas of type int. So internal they're represented by the integers 0 (FALSE) and 1 (TRUE). The ordering in the enum construct specifies the internal integer representation. By default the first enum type is associated with a zero value. 
+
+Besides that the veriable b of enum type TRUE is declared.
+
+\begin{lstlisting}
+(3) printf("%i %i\n", b, FALSE);
+\end{lstlisting}
+Because the variable b and the enum type FALSE is internal stored as an integer value no explicit cast is necessary. The format specifier converts b and FALSE as an int value. 
+
+It will produce the output:
+\begin{lstlisting}
+1 0
+\end{lstlisting}
+
+\begin{lstlisting}
+(4) enum color_tag {RED, GREEN, BLUE};
+\end{lstlisting}
+
+Here we declare the enum type color\_tag with values RED, GREEN and BLUE. As mentioned before, each of these enums are represented by ints, so we have RED=0, GREEN=0 and BLUE=2.
+
+\begin{lstlisting}
+(5) c1 = RED; c2 = c1+1; c3 = BLUE;
+\end{lstlisting}
+In this line the variables c1, c2 and c3 are initialized with values c1=0, c2=1 and c3=3.
+
 
 \subsubsection*{4. Logical Expressions}
 
 \subsubsection*{5. Conditional Expression}
+\begin{lstlisting}
+printf("%i\n", (x < y) ? x : y);
+\end{lstlisting}
+This statement is equivalent to:
+\begin{lstlisting}
+int m;
+if (x < y)
+	m = x;
+else 
+	m = y;
+printf("%i\n", m);
+\end{lstlisting}
+The tenary expression computes the miniumun of x and y. If x $<$ y holds then the statement following the ? symbol is evaluated, otherwise y is evaluated. In this example the value 2 is passed to printf() and is printed on the screen.
 
 \subsubsection*{6. Bitwise operator}
+\paragraph{a)}
+To illustrate the bitwise operators we use the integer value x=4.
+The number 4 is represented as follows:
+\begin{equation}
+[4]_{10} = [0000 \: 0100 ]_{2}
+\end{equation}
+The bitwise operation $x<<1$ shifts the bits from left to right by one bit. So after this operation $x$ is stored in the memory as follows:
+\begin{equation}
+\begin{split}
+[0000 \: 1000 ]_{2} = [8]_{10} \\ 
+= 0 \cdot 2^7 + 0 \cdot 2^6 + 0 \cdot 2^5 + 0 \cdot 2^4 + 1 \cdot 2^3 + 0 \cdot 2^2 + 0 \cdot 2^1 + 0 \cdot 2^0 \\
+= 2^3 = 8
+\end{split}
+\end{equation}
+Because the bases of the binary system are to the power of 2, a shift of one bit position corresponds to a multiplication with two. Analogously, this  holds for the right shift operation.
+
+The bitweise right shift yields:
+\begin{equation}
+[0000 \: 0010 ]_{2} = [1]_{10} \\ 
+\end{equation}
+\paragraph{b)}
+
 
 \subsubsection*{7. Order of Evaluation}
 \paragraph{a)}
-In the C programming language it isn't specified in which order the operands of an operator are evaluated. The only exceptions are the following operators: and, or, tenary and the comma operator
+The statement $f() + g()$ can produce different results for instance with the following function definitions and the variable my\_value:
+
+\begin{lstlisting}
+#include<stdio.h>
+int f(int *value){ 
+        *value = *value * 2;
+        return *value; 
+}
+
+int g(int *value){ 
+        *value = *value + 1;
+        return *value; 
+}
+
+main(){
+        int my_value = 2;
+        int res = f(&my_value)+g(&my_value);
+        printf("%i\n",res);
+}
+\end{lstlisting}
+
+If the function $f()$ is called before $g()$ this leads to my\_value=5. But if $g()$ is called before $f()$ then my\_value will be equals to 9.
+On my machine I've got the result 9. So on my machine evaluates the function g first.
+
+Briefly speaking: Function with side-effects are vulnerable to such problems.
 
 \paragraph{b)} 
+\begin{lstlisting}
+printf("%i\n", ++n, f(n));
+\end{lstlisting}
+This statement can produce different results if the variable n is a pointer.
+If we assume that n points to the top of a c-string and the function f(n) just returns the character in c-string at position n then its crucial if the address n is incremented before the function call $f(n)$.
+
+Here's an example:
+\begin{lstlisting}
+#include<stdio.h>
+char f(char *n){
+	return *n;
+}
+
+main(){
+	char c[] = "AB";
+	char* n = c;
+	printf("letter: %i \t %i\n", ++n ,f(n)); //address 65
+	printf("letter: %i \t %i\n", ++n ,f(n)); //address 66
+}
+\end{lstlisting}
 
 \subsection*{Part 2: System and Unix}
 \subsubsection*{8. Memory Diagrams}
