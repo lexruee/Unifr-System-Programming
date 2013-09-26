@@ -1,0 +1,9 @@
+#include<stdio.h>
+
+enum color {B,R,G};
+
+int main(){
+	
+	
+	return 0;
+}
