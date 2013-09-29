@@ -4,6 +4,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage{setspace}
 \usepackage{amsmath}
+\usepackage{enumitem}
 \setlength{\parskip}{1ex} %--skip lines between paragraphs
 \setlength{\parindent}{0pt} %--don't indent paragraphs
 
@@ -21,38 +22,37 @@
 \line
 \leftright{\today}{Alexander Rüedlinger, 08-129-710} %-- left and right positions in the header
 \section*{Series 2}
-\paragraph{Some remarks}
-\begin{itemize}
-\item In the C language the data type char has the size of one byte (depending on the machine: one sign bit and 7 seven data bits). They can store a value of at least $2^7-1$ and the minimum value of $-2^7$ (two's complement machine).
+\subsection*{Part 1: C}
+\paragraph{Remarks}
+\begin{itemize}[noitemsep]
 \item ASCII is a character-encoding scheme that encodes 128 specified characters. The ASCII code is the numerical representation of characters.
 \item In the ASCII table the integer value 65 corresponds to the character 'A'.
 \item The character '@' corresponds to the value 64.
 \end{itemize}
 
-\subsection*{Part 1: C}
 \subsubsection*{1. Type Conversion, Casting and ASCII Table}
 \begin{lstlisting}
 (1) printf("%c %i\n", c, c);
 \end{lstlisting}
 
 The format specifier \%c and \%i are substitued with the matching argument in the printf argument list. 
-So the specifier \%c will be replaced by the second argument c and as well the specifier \%i by the third argument c. The specifier \%i converts the third argument to an integer.
+So the specifier \%c will be replaced by the second argument c and the specifier \%i by the third argument c. The specifier \%i converts the third argument (char value) to an integer.
 
-The statement (1) will print:\\
+The statement (1) prints:\\
 A 65
 \\
 \begin{lstlisting}
 (2) printf("%c %i\n", i, i);
 \end{lstlisting}
-In the statement (2) the first format specifier \%c converts the int value i to a char 'A'. The second format specifier replaces the value without a conversion because the veriable is already an integer.
-So the output will be:\\
+In the statement (2) the first format specifier \%c converts the int value i to a char 'A'. The second format specifier replaces the value without a conversion, because the veriable is already an integer.
+The output is given by:\\
 A 65
 \\
 \begin{lstlisting}
 (3) printf("%f %i\n", pi, (int)pi);
 \end{lstlisting}
 The first format specifier takes a variable of type float and the second one a variable of type int.
-Because the third argument in printf() is explicitly casted to an int, the variable pi is truncated, so it's floating point part is lost. Thus the printf statement above prints:
+Because the third argument in printf() is explicitly casted to an integer, the variable pi is truncated, so it's floating point part is lost. Thus the printf statement above prints:
 
 3.14 3
 
@@ -70,7 +70,7 @@ This line creates a char variable using an hexadecimal constant. The hexadecimal
 \begin{equation}
 \text{at} = [4 \: 0]_{16} = [0100 \: 0000]_2 =  [64]_{10}
 \end{equation} 
-As already mentioned character values are internal stored as integers (from -128 to 127), so the ASCII value 64 corresponds to the @ symbol.
+Because character values are internal stored as integers the ASCII value 64 corresponds to the @ symbol.
 \\
 \begin{lstlisting}
 (2) printf("%c %i %o %x\n", '@', '@', '@', '@');
@@ -199,17 +199,17 @@ The expression above can be represented by the following abstract syntax tree:
 \end{figure}
 
 
-In a first step the left sub-tree of the AST with the root OR is evaluated:
+In a first step the left subtree of the AST with the root OR is evaluated:
 \begin{equation}
 p \quad \&\& \quad (p=q)
 \end{equation}
-If this sub-expression is true then C compiler evaluates the whole expression as true.
+If this subexpression is true then C compiler evaluates the whole expression as true.
 
-But if the sub-expression is false the C compiler proceeds with the right sub-tree of the AST. In this case it evaluates the sub-expression:
+But if the subexpression is false the C compiler proceeds with the right subtree of the AST. In this case it evaluates the subexpression:
 \begin{equation}
  \quad (p = !q)
 \end{equation}
-If this sub-expression is true the whole expression is evaluated as true, otherwise it's evaluated as false.
+If this subexpression is true the whole expression is evaluated as true, otherwise it's evaluated as false.
 
 \newpage
 \subsubsection*{5. Conditional Expression}
@@ -225,12 +225,15 @@ else
 	m = y;
 printf("%i\n", m);
 \end{lstlisting}
-The tenary expression computes the miniumun of x and y. If x $<$ y holds then the statement following the ? symbol is evaluated, otherwise y is evaluated. In this example the value 2 is passed to printf() and is printed on the screen.
+The tenary expression computes the miniumun of x and y. If x $<$ y holds then the statement following the ? symbol is evaluated, otherwise y is evaluated.
 
+Output is given by:
+\begin{lstlisting}
+2
+\end{lstlisting}
 \subsubsection*{6. Bitwise operator}
 \paragraph{a)}
 To illustrate the bitwise operators we use the integer value x=4.
-The number 4 is represented in binary as follows:
 \begin{equation}
 [4]_{10} = [0000 \: 0100 ]_{2}
 \end{equation}
@@ -312,6 +315,48 @@ On my machine the function $f(n)$ is called before the address n is incremented.
 
 \subsection*{Part 2: System and Unix}
 \subsubsection*{8. Memory Diagrams}
+We've the following program:
+\begin{lstlisting}
+(01) main() {
+(02)     int i=8;
+(03)     char c1='@', c2='A';
+(04)     char s[5]="@A";
+(05) }
+\end{lstlisting}
+According the ASCII table the characters correspond to:
+\begin{itemize}[noitemsep]
+\item @ = 0x40
+\item A = 0x41
+\item 8 = 0000 1000 = 0x08
+\end{itemize}
+\paragraph*{a)}
+\quad
+\begin{figure}[!htb]
+\centering
+\includegraphics[scale=0.5]{mem_a.eps} 
+\end{figure}
+
+\paragraph*{b)}
+\quad
+\begin{figure}[!htb]
+\centering
+\includegraphics[scale=0.6]{mem_b.eps} 
+\end{figure}
+
+\paragraph*{c)}
+\quad
+\begin{figure}[!htb]
+\centering
+\includegraphics[scale=0.75]{mem_c.eps} 
+\end{figure}
+
+\paragraph*{d)}
+\quad
+\begin{figure}[!htb]
+\centering
+\includegraphics[scale=0.75]{mem_d.eps} 
+\end{figure}
+
 
 \subsubsection*{9. scanf}
 \paragraph*{a) A simple program with input errors}
@@ -321,7 +366,7 @@ On my machine the function $f(n)$ is called before the address n is incremented.
 \end{lstlisting}
 The function call scanf() contains two input fields. It reads two items from the stdin and stores the values in the corresponding addresses str and \&i. The first item is a c-string and the second item is an integer. In this example the values AA and 33 are read from the file Fig9\_input.txt.
 
-The scanf() function returns an integer value indicating the number of items successfully filled. If scanf() fails then  it rerturns 0 or a negative value. So the variable d stores the numbers of read items. In this example d is equals to 2, because AA ad 33 are two items.
+The scanf() function returns an integer value indicating the number of items successfully filled. If scanf() fails it rerturns 0 or a negative value. In this example d is equals to 2, because AA ad 33 are two items.
 
 \begin{lstlisting}
 (2) d = scanf("%s %i", str, &i);
@@ -362,7 +407,6 @@ main(){
         printf("c=%c \t s=%s \t f=%f\n",c,s,f);
 }
 \end{lstlisting}
-
 To test this simple program I created an input file with the content:
 \begin{lstlisting}
 A Alexander 3.14
@@ -384,7 +428,6 @@ Using the following command I append the current directory to the PATH  variable
 \begin{lstlisting}
 PATH=$PATH:./
 \end{lstlisting}
-
 As we can see in the last line that the current directory is succesfully appended to the system PATH variable.
 \begin{lstlisting}
 echo $PATH
