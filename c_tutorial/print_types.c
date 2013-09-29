@@ -5,5 +5,6 @@ main(){
 	printf("size of float %lu bits\n",sizeof(float)*8);
 	printf("size of short %lu bits\n",sizeof(short)*8);
 	printf("size of long %lu bits\n",sizeof(long)*8);
-
+	printf("size of unsigned long %lu bits\n",sizeof(unsigned long)*8);
+	
 }
