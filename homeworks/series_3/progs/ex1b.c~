@@ -1,0 +1,12 @@
+
+
+main(){
+	int n = 10, i = 0;
+	
+	goto rep;
+
+	rep:
+		printf("%i\n",i++);
+		if(i < 10)
+			goto rep;
+}

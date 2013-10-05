@@ -1,0 +1,326 @@
+\documentclass[12pt]{article}
+\usepackage{url,graphicx,tabularx,array,geometry}
+\usepackage{listings}
+\usepackage[utf8]{inputenc}
+\usepackage{setspace}
+\usepackage{amsmath}
+\usepackage{enumitem}
+\setlength{\parskip}{1ex} %--skip lines between paragraphs
+\setlength{\parindent}{0pt} %--don't indent paragraphs
+
+%-- Commands for header
+\renewcommand{\title}[1]{\textbf{#1}\\}
+\renewcommand{\line}{\begin{tabularx}{\textwidth}{X>{\raggedleft}X}\hline\\\end{tabularx}\\[-0.5cm]}
+\newcommand{\leftright}[2]{\begin{tabularx}{\textwidth}{X>{\raggedleft}X}#1%
+& #2\\\end{tabularx}\\[-0.5cm]}
+
+\onehalfspacing
+%\linespread{2} %-- Uncomment for Double Space
+\begin{document}
+
+\title{Imperative and System Programming Autumn 2013}
+\line
+\leftright{\today}{Alexander Rüedlinger, 08-129-710, Group 05} %-- left and right positions in the header
+\section*{Series 3}
+
+\subsection*{1. Loops: while and for}
+From a theoretical point of view this a very interesting exercise.  That's because that while and goto programs are both equivalent to turing machines and therefore turing complete. In this sense the C programming language is also turing complete.
+The main result in this exercise is of course that each while loop can be rewritten using a goto statement, and each for loop using a while loop. Besides that a loop can be rewritten using recursion.
+
+\paragraph*{a)}\quad
+\begin{lstlisting}
+#include<stdio.h>
+main(){
+	int low,high=10;	
+	for(low=0; low <= high; low++)
+		printf("%i\n",low);
+}
+\end{lstlisting}
+\paragraph*{b)}
+\quad
+\begin{lstlisting}
+#include<stdio.h>
+
+main(){
+	int n = 10;
+	int low = 0, high = n - 1;
+	do {
+		printf("%i\n",low++);
+	} while(low <= high);
+}
+\end{lstlisting}
+
+\subsection*{2. goto and labels}
+\paragraph*{a)}
+\quad
+\begin{lstlisting}
+#include<stdio.h>
+main(){
+	int n = 10, i = 0;	
+	//enter goto loop
+	rep:
+	if(i < n){	
+		printf("%i\n",i++);		
+		goto rep; //repeat
+	}
+}
+\end{lstlisting}
+\paragraph*{b)} \quad
+\begin{lstlisting}
+#include<stdio.h>
+/** this is a kickass state machine! */
+main(int argc, char* argv[]){
+	int i;
+	if(argc==2 && (*argv[1]>='0' && *argv[1]<='9'))
+		i = *argv[1] - '0';
+	else goto end; 
+
+	//jump/state table
+	if(i==1) goto case_1;
+	else if(i==2) goto case_2;
+	else goto _default;	
+
+	//cases
+	case_1: printf("first case\n"); goto end;
+	case_2: printf("second case\n"); goto end;
+	_default: printf("other case\n"); goto end;
+	end: ;  //do nothing
+}
+\end{lstlisting}
+
+\paragraph*{c)}
+\quad
+\begin{lstlisting}
+#include<stdio.h>
+
+void f1(){printf("f1\n");}
+void f2(){printf("f2\n");}
+
+main(){
+	int cond1 = 0, cond2 = 1, n=3, i;
+	_continue:
+	for(i = 0; i < n; i++){
+		f1();
+		if(cond1) goto _break;
+		f2();
+		cond1 = 1;		
+		if(cond2) goto _continue;
+	}
+	
+	_break: ;
+}
+\end{lstlisting}
+
+\subsection*{UNIT Testing: first contact}
+
+
+
+\paragraph*{b) sftp}
+
+\paragraph*{c) Combination of sftp and ssh}
+
+
+\subsection*{Binsearch: test and complexity}
+\newpage
+\subsection*{Remote Access Tutorial}
+\subsubsection*{Exercises 1,2,3}
+\paragraph*{Exercise 1:}
+
+To get a list of available hosts we can write a simple ruby program like this one:
+\begin{lstlisting}
+#! /usr/bin/ruby -w
+#
+#@author	Alexander Rueedlinger
+#@matrikel	08-129-710
+#@date		2013
+#
+
+host_prefix = "diufsppc"
+host_postfix = ".unifr.ch"
+
+ids = (701..720)
+
+found_hosts = Array.new
+ids.each do |id|
+	hostname = "#{host_prefix}#{id}#{host_postfix}"
+	out = `ping #{hostname} -c 1`
+	if out.include? "1 packets transmitted, 1 received"
+		found_hosts << hostname
+		puts "found host: #{hostname}"	
+	end
+end
+\end{lstlisting}
+
+So here are some machines;
+\begin{lstlisting}
+ ./find_hosts.rb
+found host: diufsppc703.unifr.ch
+found host: diufsppc708.unifr.ch
+found host: diufsppc710.unifr.ch
+found host: diufsppc712.unifr.ch
+found host: diufsppc713.unifr.ch
+found host: diufsppc714.unifr.ch
+found host: diufsppc716.unifr.ch
+found host: diufsppc717.unifr.ch
+found host: diufsppc719.unifr.ch
+found host: diufsppc720.unifr.ch
+\end{lstlisting}
+
+I choose the machine diufsppc719.unifr.ch, because the girl in front of me is logged in on this machine. I hope she doesn't mind.
+
+\begin{lstlisting}
+lexruee@death-star:~$ ssh Rueedlin@diufsppc719.unifr.ch
+Password:
+
+rueedlin@diufsppc719:~$ 
+\end{lstlisting}
+
+Entering the date command yields the following output:
+\begin{lstlisting}
+rueedlin@diufsppc719:~$ date
+Thu Oct  3 14:26:06 CEST 2013
+\end{lstlisting}
+
+\paragraph{Questions}
+\begin{itemize}
+\item 1. The first part rueedlin of the prompt is my username and the second part after the @ is the hostname that is diufsppc719.
+\item 2. The command line date has been executed on the remote machine diufsppc719.
+\item 3. The given date is the local date of the remote machine.
+\end{itemize}
+
+In order to find out what's her username I can use the command w:
+\begin{lstlisting}
+rueedlin@diufsppc719:~$ w
+ 13:46:55 up 42 min,  2 users,  load average: 0.23, 0.36, 0.29
+USER     TTY      FROM              LOGIN@   IDLE   JCPU   PCPU WHAT
+scheubca tty7     :0               13:06   42:14   1:05   0.12s gnome-session
+rueedlin pts/0    wlan-per2-146-21 13:43    0.00s  0.24s  0.01s w
+\end{lstlisting}
+
+The w command lists all the users that are currently logged in on the machine.
+
+So her username is scheubca.
+
+Let's see which programs she is currently using:
+
+\begin{lstlisting}
+ps -aux | grep scheubca
+scheubca  2084  4.4  5.1 582780 209976 ?       
+Sl   13:06   2:03 /usr/lib/firefox/firefox
+scheubca  2132  0.2  1.0 116624 43488 ?        
+Sl   13:08   0:05 /opt/Adobe/Reader9/Reader/intellinux/bin/acroread 
+/tmp/Traktandenliste_9.10.2013.pdf
+scheubca  2256  1.5  2.1 207912 86756 ?        
+Sl   13:10   0:39 /usr/lib/openoffice/program/soffice.bin -writer -splash-pipe=6
+\end{lstlisting}
+
+The command ps reports a snapshot of the current processes. The man page of ps says the following about the options -aux:
+\begin{quote}
+The POSIX and UNIX standards require
+       that "ps -aux" print all processes owned by a user named "x", as well as printing all
+       processes that would be selected by the -a option. 
+\end{quote}
+ 
+From this output I can see that she's is currently browsing using the firefox webbrowser. Besides that she has opened adobe reader to read a pdf called Traktandenliste\_9.10.2013.pdf. Another program that she launched is openoffice.
+
+Now, let's check out her home directory:
+\begin{lstlisting}
+cd ../scheubca
+ls
+rueedlin@diufsppc719:/home/local/UNIFR/scheubca$ ls
+C:\nppdf32Log\debuglog.txt  Desktop  Documents  
+Downloads  examples.desktop  greiner.odt  
+Music  Pictures  Public  Templates  Videos
+\end{lstlisting}
+
+Here I can see that she has a odt-file in her home directory called greiner.odt.
+
+The conclusion of this small exercise is that the home directories of the ubuntu users are not protected!
+\paragraph*{Exercise 2:}
+The following outputs show a sftp session on the machine diuf719.unifr.ch.
+
+sftp login:
+\begin{lstlisting}
+$sftp Rueedlin@diufsppc719.unifr.ch
+Password:
+Connected to diufsppc719.unifr.ch.
+\end{lstlisting}
+List all files:
+\begin{lstlisting}
+sftp> ls
+examples.desktop    
+\end{lstlisting}
+
+Show the path to the current directory:
+\begin{lstlisting}
+sftp> pwd
+Remote working directory: /home/local/UNIFR/rueedlin
+\end{lstlisting}
+
+Create a folder named Documents:
+\begin{lstlisting}
+sftp> mkdir Documents
+sftp> ls
+Documents           examples.desktop
+\end{lstlisting}
+
+Upload the file text.txt into folder Documents:
+\begin{lstlisting}
+sftp> put test.txt Documents/text.txt
+Uploading test.txt to /home/local/UNIFR/rueedlin/Documents/text.txt
+test.txt                                      100%   12     0.0KB/s   00:00 
+\end{lstlisting}
+
+Download the file test.txt and save it on my local machine in the Documents folder:
+\begin{lstlisting}
+sftp> get Documents/text.txt /home/lexruee/Documents/test_copy.txt
+Fetching /home/local/UNIFR/rueedlin/Documents/text.txt to 
+/home/lexruee/Documents/test_copy.txt
+/home/local/UNIFR/rueedlin/Documents/text.txt 100%   12     0.0KB/s   00:00 
+\end{lstlisting}
+
+\paragraph{Exercise 3}
+This exercise could be solved much simpler using the wget command on the remote machine.
+For example:
+\begin{lstlisting}
+lexruee@death-star:~$ 
+lexruee@death-star:~$ ssh Rueedlin@diufsppc719.unifr.ch
+password:
+
+rueedlin@diufsppc719:
+rueedlin@diufsppc719:wget http://diuf.unifr.ch/pai/ip/labs/kr/kr1/kr006.c\  
+-o helloworld.c
+rueedlin@diufsppc719:gcc helloworld.c -o helloworld
+rueedlin@diufsppc719:./helloworld
+\end{lstlisting}
+
+
+\subsubsection*{a) ssh, sftp and shttp}
+\paragraph{ssh}
+The command ssh which stands for Secure Shell and is an application protocol that allows a user to administrate a remote machine from his local host. The underlying protocol which is used to establish a connection between the remote and local machine is the TCP protocol (transmission control protocol).
+ 
+\paragraph{sftp}
+SSH File Transfer Protocol (sftp) is an application protocol that allows  user to upload, download, delete, and rename files on a remote host over the ssh protocol. To put it differently, sftp is above ssh in the protocol stack and uses ssh as a service to communicate.
+
+\paragraph{shttp}
+Secure Hypertext Transfer Protocol or short shttp is also an application protocol. It's an extension of the http protocol.
+
+So the differences are:
+\begin{itemize}
+\item ssh: a secure remote terminal to administrate a remote machine.
+\item shttp: a secure extension of the http protocol which encrypts the http header fields and the http payload.
+\item sftp: a secure alternative to ftp that uses ssh as underlying communication protocol to encrypt file transfers between hosts.
+\end{itemize}
+
+\subsubsection*{b)}
+Every system that is remotely accessible is vulnerable to attacks. In the example of an internet server with enabled ssh daemon the biggest security problem is that everyone can try to login. Simple brute force programs could attempt to login with different user names and user passwords until they've found a valid user/password combination.
+
+Another security concerns are the user rights associated with a ssh user account. If such a ssh user has the same rights as root then this is a huge security hole. So it's a really bad idea to allow root users to login via ssh! Such a system can be contaminated and abused as a email spam server.
+
+The best way to secure a system from evil ssh user is to jail ssh user to their home directory. If the user is jailed into his home directory he is not able to access, create, modify or delete files outside of their home dir.
+ 
+
+
+
+
+\end{document}

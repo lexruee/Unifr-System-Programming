@@ -1,0 +1,8 @@
+compare
+low_initial = 0
+0
+1
+2
+3
+4
+low_final = 5
