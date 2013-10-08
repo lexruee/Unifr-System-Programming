@@ -113,14 +113,166 @@ main(){
 
 \subsection*{UNIT Testing: first contact}
 
+\subsubsection*{a) Testing 1a) anf 1b)}
+For these programs I've created a simple text file named n.txt.
+It just contains the value 3.
 
+The programs in 1a) and 1b) are tested as follows:
+\begin{lstlisting}
+ ./Sol1a < n.txt 
+> n = low_initial = 0
+0
+1
+2
+low_final = 3
+\end{lstlisting}
 
-\paragraph*{b) sftp}
+\begin{lstlisting}
+./Sol1b < n.txt 
+> n = low_initial = 0
+0
+1
+2
+low_final = 3
+\end{lstlisting}
 
-\paragraph*{c) Combination of sftp and ssh}
+So both programs produce the same output as Fig1a. Therefore they behave correctly:
+\begin{lstlisting}
+./Fig1a < n.txt 
+> n = low_initial = 0
+0
+1
+2
+low_final = 3
+\end{lstlisting}
 
+\subsubsection*{b) Testing 2a) and 2b)}
+Here I use the same testing strategy. Again a use a file called n.txt which contains a value of 3.
+
+I ran both programs using the pipe operator to read a input file.
+\begin{lstlisting}
+./Sol2a < n.txt
+./Sol2b < n.txt
+\end{lstlisting}
+
+For Sol2a I get the output:
+\begin{lstlisting}
+./Sol2a < n.txt 
+> n = 0
+1
+2
+i_final = 3
+\end{lstlisting}
+
+For Sol2b I get the output:
+\begin{lstlisting}
+./Sol2b < n.txt 
+> i = other case
+\end{lstlisting}
+
+These ouputs are in line with Fig2a and Fig2b.
 
 \subsection*{Binsearch: test and complexity}
+\subsubsection*{a)}
+To test the binary search algorithm I created a file named numbers.txt with the content below:
+\begin{lstlisting}
+10
+3 0 1
+8 1 1
+9 2 1
+13 3 1
+15 4 1
+67 5 1
+77 6 1
+91 7 1
+6 8 0
+11 9 0
+\end{lstlisting}
+The first number on the first line is the size of the list that is used in the test. The next lines are encoded as follows. The first number represents the number in the list. The second number specifies the position of the first number in the list. The last number specifies if the test should pass (1) or fail (0).
+
+For example the line 8 1 1 says that the number 8 is on the position 1 in the list and that the test should pass. The line 11 9 0 says that the number 11 is on the position 9 and that the test should fail.
+
+So the test scenario is as follows. A list with values $\begin{bmatrix}
+3 & 8 & 9 & 13 & 15 & 67 & 77 & 91 & 6 & 11
+\end{bmatrix} $ is passed to the binary search algorithm.
+
+All the values are increasing from left to right. But the last two values are incorrectly positioned.
+
+So the tests that uses values from 3 to 91 should all pass and last two tests which use the values 6 and 11 should fail.
+
+The output of the test programs yields:
+\begin{lstlisting}
+test:
+find num: 3, res pos: 0, expected pos: 0, test ok?: pass
+find num: 8, res pos: 1, expected pos: 1, test ok?: pass
+find num: 9, res pos: 2, expected pos: 2, test ok?: pass
+find num: 13, res pos: 3, expected pos: 3, test ok?: pass
+find num: 15, res pos: 4, expected pos: 4, test ok?: pass
+find num: 67, res pos: 5, expected pos: 5, test ok?: pass
+find num: 77, res pos: 6, expected pos: 6, test ok?: pass
+find num: 91, res pos: 7, expected pos: 7, test ok?: pass
+find num: 6, res pos: -1, expected pos: 8, test ok?: pass
+find num: 11, res pos: -1, expected pos: 9, test ok?: pass
+\end{lstlisting} 
+
+As we can see each tests passes. The last two tests are correct because we expected them to fail.
+
+The test program test\_binsearch.c looks like this:
+\begin{lstlisting}
+/**
+ * @author Alexander Rueedlinger
+ * @date 2013
+ */
+
+#include "kr058.c"
+#include<stdio.h>
+
+main(){
+	int n, p;
+	scanf("%i",&n); //size of the list
+
+	int i, numbers[n], positions[n], should[n];	
+	
+	int d;
+	for(i = 0; i < n; i++){
+		d = scanf("%i %i %i",&numbers[i],&positions[i],&should[i]);
+		if(d < 3){
+			while(getchar()!='\n');	
+		}
+	}
+
+	printf("test:\n");
+	int check, num, res_pos, expected_pos;
+	for(i=0; i < n; i++){
+		num = numbers[i];
+		expected_pos = positions[i];
+		res_pos = binsearch(num, numbers, n);
+		check = (res_pos == expected_pos) == should[i]; 
+		printf("find num: %i, res pos: %i, expected pos: %i, test ok?: %s\n",num,res_pos,expected_pos,check ? "pass" : "fail");
+	}
+}
+\end{lstlisting}
+\subsubsection*{b)}
+\paragraph{Input}
+The algorithm takes as an input an array of n integers A and an integer k.
+
+\paragraph{Output}
+If the integer k is found in the array A the algorithm returns its position otherwise it returns -1.
+
+\paragraph{Invariant}
+All the integers in the array A are sorted.
+
+\paragraph{Analysis}
+In a first step binary search compares the integer k with the median of the array A.
+
+If the median is equals to k then we've found the position of k. In this case the complexity is O(1) which is the best case.
+
+If k is below the median binary search shrinks the bounds of the array A.
+In this case it halves the array. The same is true if k is above the median.
+In these two cases binary search halves the remaining array until it reaches the size 1.
+
+This having procedure produces a log base 2 sequence. Therefore in the average case and worst case the complexity is O(ln(n)).
+
 \newpage
 \subsection*{Remote Access Tutorial}
 \subsubsection*{Exercises 1,2,3}
@@ -294,6 +446,35 @@ rueedlin@diufsppc719:gcc helloworld.c -o helloworld
 rueedlin@diufsppc719:./helloworld
 \end{lstlisting}
 
+However,...
+
+First I download the kr006.c using wget on my local machine:
+\begin{lstlisting}
+wget http://diuf.unifr.ch/pai/ip/labs/kr/kr1/kr006.c
+\end{lstlisting}
+
+In a next step I connect to the remote machine via sftp:
+\begin{lstlisting}
+sftp Rueedlin@diufsppc720.unifr.ch
+\end{lstlisting}
+
+Now, I upload the kr00 6.c file:
+\begin{lstlisting}
+sftp> put kr006.c kr006.c 
+Uploading kr006.c to /home/local/UNIFR/rueedlin/kr006.c
+kr006.c                                       100%   73     0.1KB/s   00:00 
+\end{lstlisting}
+
+After that I rename the file using mv:
+\begin{lstlisting}
+mv kr006.c helloworld.c
+\end{lstlisting}
+
+Finally I compile and execute the program:
+\begin{lstlisting}
+gcc helloworld.c -o helloworld && ./helloworld 
+hello, world
+\end{lstlisting}
 
 \subsubsection*{a) ssh, sftp and shttp}
 \paragraph{ssh}
@@ -315,12 +496,9 @@ So the differences are:
 \subsubsection*{b)}
 Every system that is remotely accessible is vulnerable to attacks. In the example of an internet server with enabled ssh daemon the biggest security problem is that everyone can try to login. Simple brute force programs could attempt to login with different user names and user passwords until they've found a valid user/password combination.
 
-Another security concerns are the user rights associated with a ssh user account. If such a ssh user has the same rights as root then this is a huge security hole. So it's a really bad idea to allow root users to login via ssh! Such a system can be contaminated and abused as a email spam server.
+Another security concerns are the user rights associated with a ssh user account. If such a ssh user has the same rights as root then this is a huge security hole. So it's a really bad idea to allow root users to login via ssh! Such a system can be contaminated and abused as a email spam server. Besides that an evil user can spy out the and damage network. 
 
 The best way to secure a system from evil ssh user is to jail ssh user to their home directory. If the user is jailed into his home directory he is not able to access, create, modify or delete files outside of their home dir.
  
-
-
-
 
 \end{document}

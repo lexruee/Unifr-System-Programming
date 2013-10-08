@@ -1,0 +1,6 @@
+#include<stdio.h>
+main(){
+	int low,high=10;	
+	for(low=0; low <= high; low++)
+		printf("%i\n",low);
+}
