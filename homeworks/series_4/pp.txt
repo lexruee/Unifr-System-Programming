@@ -1,0 +1,6 @@
+#define max(A, B) ((A) > (B) ? (A) : (B))
+#define square(x) (x) * (x)
+max(a, b);
+max(a+1, b+1);
+square(x);
+square(x+1);

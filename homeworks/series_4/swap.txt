@@ -1,0 +1,3 @@
+#include<stdio.h>
+#define swap(int,a,b) a=a^b; b=a^b; a=a^b;
+

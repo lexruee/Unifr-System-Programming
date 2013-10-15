@@ -1,0 +1,1 @@
+void tellMe(char s[]);
