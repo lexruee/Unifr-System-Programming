@@ -1,0 +1,93 @@
+\documentclass[12pt]{article}
+\usepackage{url,graphicx,tabularx,array,geometry}
+\usepackage{listings}
+\usepackage[utf8]{inputenc}
+\usepackage{setspace}
+\usepackage{amsmath}
+\usepackage{enumitem}
+\setlength{\parskip}{1ex} %--skip lines between paragraphs
+\setlength{\parindent}{0pt} %--don't indent paragraphs
+
+%-- Commands for header
+\renewcommand{\title}[1]{\textbf{#1}\\}
+\renewcommand{\line}{\begin{tabularx}{\textwidth}{X>{\raggedleft}X}\hline\\\end{tabularx}\\[-0.5cm]}
+\newcommand{\leftright}[2]{\begin{tabularx}{\textwidth}{X>{\raggedleft}X}#1%
+& #2\\\end{tabularx}\\[-0.5cm]}
+
+\onehalfspacing
+%\linespread{2} %-- Uncomment for Double Space
+\begin{document}
+
+\title{Imperative and System Programming Autumn 2013}
+\line
+\leftright{\today}{Alexander Rüedlinger, 08-129-710, Group 05} %-- left and right positions in the header
+\section*{Series 4}
+\subsection*{Stack light basic}
+\paragraph{a)} 
+\emph{Behaviour:}
+By removing an element from an empty stack the test program STACK\_test\_BA terminates with an EXIT FAILURE return value. On posix system this value is 1 and is defined in the header file stdlib.h and indicates the os that a error occurred.
+
+The implementation of the stack has a max capacity of four elements. By pishing fourth element on the stack the test program terminates with an EXIT FAILURE return value.
+
+\emph{Implementation:}
+According the stack implementation the behaviour of the test program by removing an element from an empty stack is correct. The variable top "points" to next free place in the int array base. If top points to zero and get is called the stack implementation terminates with an EXIT FAILURE.
+
+If the variable top "points" on the position after the last valid place in the stack (index 4) it terminates with an EXIT FAILURE.
+
+In all cases the test program behaves according the stack implementation.
+
+\paragraph{b)}
+The C bible (KR, page 85) states that in the absence of explicit initialization, external and static variables are guaranteed to be initialized to zero. Automatic and register variables have undefined initial values, that is garbage values.
+
+Because the variable top is a external and static variable it is implicit initialized to zero.
+
+The code should be clear, understandable and maintainable therefore it is better to initialize variables explicit form a programmers perspective.
+
+\paragraph{c)}
+The variable top and the array base are declared static, because they are used as glocal permanent storage. Because the variable is declared outside the main function top and the base array are global variables which are accessible by all functions declared in the same source code file. But the static keyword makes both global variables only local accessible in the file which they're defined. So their global scope is limited which is referred as glocal.
+This protects the variable base and top to be modified by "strangers" or by other programs and eliminates the possibility of side effects. 
+
+\paragraph{d)}
+The error states that the variable base is modified at file scope.
+An answer on stackoverflow.com related to this problem says that the keyword const doesn't mean a constant in C. It means "read only". Therefore the value CAPACITY which is stored at a memory address could be changed by machine code.
+
+\paragraph{e)}
+\begin{lstlisting}
+#define CAPACITY 4
+\end{lstlisting}
+
+The symbolic constants is preprocessed by the c preprocessor. Each occurrence of this string is replaced by its definition. The C bible says that the scope of symbolic constants is from its point of definition to the end of the source file being compiled.
+
+In case (1) the symbolic constants CAPACITY is placed inside a header file. Here the scope starts with the first file that includes the header file STACK\_SR\_Specif.h and ends until the file is being compiled.
+
+In case (3) the scope of CAPACITY starts from the point of its definition until the file is being compiled.
+
+If we move the symbolic constants into the header file then the macro CAPACITY becomes part of the stack specification. One disadvantage is that the capacity detail is exposed in the header file which is a kind of a "interface". An advantage is that the capacity can easily be in the header file specification and not in the implementation. 
+
+Life time does not make any sense because a macro is not a variable it is just a text replacement performed by the preprocessor. But it makes sense to think about the scope of a macro which is global.
+
+\paragraph{f)}
+
+In the java programming language such a procdure is called peek in the stack interface:\\ 
+\url{http://docs.oracle.com/javase/7/docs/api/java/util/Stack.html#peek()}
+
+Thus I name this procedure stack\_peek() to retrieve the top value of the stack.
+\begin{lstlisting}
+int stack_peek(){
+	if(top == 0) exit(EXIT_FAILURE);
+	return base[top-1];
+}
+\end{lstlisting}
+
+Besides that I put a prototype in the header file STACK\_SR\_Specif.h and i adapted the STACK\_test.c file to test the peek function.
+\subsection*{Scope and Lifetime}
+Nothing todo.
+
+\subsection*{Make: A First Contact}
+
+\subsection*{Macros and Preprocessor: A First Contact}
+
+\subsection*{Process Memory Model}
+Nothing todo.
+
+\end{document}
