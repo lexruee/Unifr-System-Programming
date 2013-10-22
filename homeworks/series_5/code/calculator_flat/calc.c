@@ -102,34 +102,27 @@ double pop(void)
 // (a simplified version of kr78: numbers are restricted to integers)
 
 #define BUFSIZE 100
+//use macro functions
+#define ungetch(c) do { if ( bufp >= BUFSIZE) printf("ungetch: too many characters\n"); else buf[bufp++] = c; }while(0)
+#define getch()	((bufp > 0) ? buf[--bufp] : getchar())
 
 int getop(char s[])
 {
-    /*
-     * That's really ugly code. 
-     * I was forced to wite such "ugly" code to solve the exercise!
-     */ 	
     static char buf[BUFSIZE];
     static int bufp = 0;
     char c;
     int i=0;
 
-    //Hack alert!!!
-    while ((c=((bufp > 0) ? buf[--bufp] : getchar())) == ' ' || c =='\t') ; // skip spaces
+     while ((c=getch()) == ' ' || c =='\t') ; // skip spaces
 
     if (c<'0' || c>'9')                      // c is not a digit
         return c;  
 
     s[0]=c;
-    while(isdigit(s[++i] = c = ((bufp > 0) ? buf[--bufp] : getchar())))     // collect integer
+    while(isdigit(s[++i] = c = getch()))     // collect integer
         ;
     s[i]='\0';                               // string terminator
-    // save the last read character
-    // Hack alert!!!
-    ((c!=EOF && bufp >= BUFSIZE) ? printf("ungetch: too many characters\n") : (buf[bufp++] = c));
-    
+    if (c!=EOF) ungetch(c);                  // save the last read character
     return NUMBER;
 }
 /*------------------------------------------------------*/
-    
-
