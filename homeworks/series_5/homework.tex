@@ -22,8 +22,77 @@
 \line
 \leftright{\today}{Alexander Rüedlinger, 08-129-710, Group 05} %-- left and right positions in the header
 \section*{Series 5}
-\subsection*{Memory Model}
+\subsection*{3. Caclulator}
+\paragraph{a)} 
 
-\subsection*{Abstract Syntax Tree (AST) and Execution Stack (ES)}
+\begin{lstlisting}
+int getch(void)	// get a (possibly pushed back) character --- kr79
+{
+    return (bufp > 0) ? buf[--bufp] : getchar();
+}
+\end{lstlisting}
+
+\subparagraph{No system call...} If the variable bufp is greater than zero then there is a at least one character in the buffer buf[].
+
+If bufp $>$ 0 then the function getch() doesn't perform an IO system function call by calling getchar(). It returns instead the last inserted character from the buffer.
+
+If busp $<=$ 0 then the function getch() performs an IO system function call getchar() and reada the next character from the stdin.
+
+\subparagraph{cache memory}
+\begin{quote}
+[...]a cache is a component that transparently stores data so that future requests for that data can be served faster. [...]
+\end{quote}
+Source: wikipedia.com, keyword: cache
+
+In this example the buffer acts as a temporary storage of a character that has been eaten by getop() but which is needed in a further processing step.
+
+The buffer can be regarded as a cache memory because it allows to access a pre-fetched character from the stdin in a fast way. Compared to a system call an access to a cache memory to read a character is much faster.
+
+\paragraph{b)}
+To solve this exercise in an easy way I defined the function calls getch() and ungetch() as macros. Here I used the do {}while(0) trick to implement the ungetch function. The function getch() is just replaced by the ternary if-else construct. This way the code must be slightly adjusted:
+
+\begin{lstlisting}
+int getop(char s[])
+{
+    static char buf[BUFSIZE];
+    static int bufp = 0;
+    ...
+\end{lstlisting}
+
+Fore more details see the implementation.
+
+Both implementations the original one and the refactored one produce the same output:
+\begin{lstlisting}
+./calc < calc_input.txt 
+	6
+	5
+	30
+\end{lstlisting}
+
+\subsection*{4. FIFO}
+For this exercise I implemented a help function called fifo\_shift() and fifo\_print().
+
+\begin{lstlisting}
+void fifo_shift(){
+   int i; 
+   for(i=1; i < CAPACITY; i++){
+     *(base + (i-1)) = *(base + i);
+   }
+   *(base + (CAPACITY-1)) = 0; //set last position to zero
+}
+\end{lstlisting} 
+
+\begin{lstlisting}
+void fifo_print(){
+    int i;
+    printf("["); 
+    for(i=0; i < CAPACITY; i++){
+        printf(" %i ",base[i]);  
+    }
+    printf("]\n");       
+}
+\end{lstlisting}
+
+If an overflow happens in the function fifo\_put() then each position in the array base is shifted one position to the left (from i to i-1) and the value passed to fifo\_put() is set at the last position of the base array.
 
 \end{document}

@@ -1,0 +1,58 @@
+/*--------------------------------------------------------------------------------
+STACK subroutines implementation
+Author: Beat Hirsbrunner, DIUF, University of Fribourg, Switzerland, © 2005-2013
+Version: UA v4.1, 10 March 2013
+--------------------------------------------------------------------------------*/
+
+#include <stdlib.h>  // exit, malloc, realloc
+#include "STACK_SR_Specif.h"
+
+
+/*--- sketch of the data structure ---------
+           -----------------------------
+           | * | * | * | * |   |   |   | 
+           ----------------------------- 
+             |              top
+            base
+------------------------------------------*/
+
+
+//--- shared variables
+#define INIT_CAP 2   // initial capacity of the stack, > 0
+static int *base;    // points to the base elt of the stack array
+static int top = 0;  // pseudo pointer referring to the next free entry, 0 <= top <= capacity
+static int capacity = INIT_CAP;  // current stack capacity, >= INIT_CAP
+
+
+//--- stack subroutines
+void stack_put(int e)
+{
+  static int i = 0;     //--- tricky, used to create a first stack array storage
+  
+  if (i++ == 0) {         //--- memory allocation the first time 'put' is called
+    base = malloc(capacity * sizeof(int));
+  }
+  else if (top == capacity) {                   //--- possibly find a free place
+    capacity = 2 * capacity;
+    base = realloc(base, capacity * sizeof(int));         // memory reallocation
+  }
+    
+  base[top++] = e;
+}
+
+int stack_get()
+{
+  if (top == 0) exit(EXIT_FAILURE); // stack is empty
+   
+  if (capacity/2 > top && capacity > INIT_CAP) //--- possibly decrease stack's cap
+  {
+    capacity = capacity/2;
+    base = realloc(base, capacity * sizeof(int));
+  }
+    
+  return base[--top];
+}
+
+int stack_size(){
+	return top;
+}
